@@ -8,7 +8,30 @@ class CategoriesSeeder extends Seeder
     protected function categories()
     {
         return [
-            ['name' => 'Uncategorized']
+            [
+                'name' => 'Uncategorized',
+                'color' => 'bg-info'
+            ],
+            [
+                'name' => 'Programming',
+                'color' => 'bg-primary'
+            ],
+            [
+                'name' => 'Stock Market',
+                'color' => 'bg-warning'
+            ],
+            [
+                'name' => 'Family',
+                'color' => 'bg-success'
+            ],
+            [
+                'name' => 'Politics',
+                'color' => 'bg-danger'
+            ],
+            [
+                'name' => 'Finances',
+                'color' => 'bg-secondary'
+            ]
         ];
     }
     

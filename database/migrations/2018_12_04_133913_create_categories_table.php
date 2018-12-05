@@ -11,6 +11,7 @@ class CreateCategoriesTable extends Migration
         Schema::create('categories', function (Blueprint $table) {
             $table->smallIncrements('id');
             $table->string('name')->unique();
+            $table->string('color', 15)->unique();
         });
     }
 
