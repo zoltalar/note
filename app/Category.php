@@ -2,7 +2,7 @@
 
 namespace App;
 
-class Category extends Base
+final class Category extends Base
 {
     protected $table = 'categories';
     
