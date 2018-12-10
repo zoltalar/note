@@ -33072,7 +33072,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         setCategory: function setCategory(category) {
-            this.category = category;
+            if (this.category !== null && this.category.id === category.id) {
+                this.category = null;
+            } else {
+                this.category = category;
+            }
+        },
+        validated: function validated() {
+            return this.note !== '' && this.category !== null;
         }
     },
     mounted: function mounted() {
@@ -33148,22 +33155,20 @@ var render = function() {
         )
       ]),
       _vm._v(" "),
-      _vm._m(0)
+      _c("div", { staticClass: "form-group" }, [
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-primary btn-sm btn-block",
+            attrs: { disabled: !_vm.validated() }
+          },
+          [_vm._v("Add")]
+        )
+      ])
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c("button", { staticClass: "btn btn-primary btn-sm btn-block" }, [
-        _vm._v("Add")
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

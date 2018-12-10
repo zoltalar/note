@@ -12,7 +12,7 @@
                 </ul>
             </div>
             <div class="form-group">
-                <button class="btn btn-primary btn-sm btn-block">Add</button>
+                <button class="btn btn-primary btn-sm btn-block" :disabled="!validated()">Add</button>
             </div>
         </form>
     </div>
@@ -36,7 +36,14 @@
                     })
             },
             setCategory(category) {
-                this.category = category
+                if (this.category !== null && this.category.id === category.id) {
+                    this.category = null
+                } else {
+                    this.category = category
+                }
+            },
+            validated() {
+                return this.note !== '' && this.category !== null
             }
         },
         mounted() {
