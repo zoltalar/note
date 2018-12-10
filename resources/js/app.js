@@ -1,5 +1,3 @@
-require('./bootstrap')
-
 window.Vue = require('vue')
 window.axios = require('axios')
 
