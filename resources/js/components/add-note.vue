@@ -3,6 +3,9 @@
         <form>
             <div class="form-group">
                 <textarea class="form-control" rows="3" placeholder="Add a note..." v-model="note"></textarea>
+                <div class="invalid-feedback" v-show="error.note !== ''" :class="{ 'd-block': error.note !== '' }">
+                    {{ error.note }}
+                </div>
             </div>
             <div class="form-group">
                 <ul class="list-inline">
@@ -12,7 +15,7 @@
                 </ul>
             </div>
             <div class="form-group">
-                <button class="btn btn-primary btn-sm btn-block" :disabled="!validated()">Add</button>
+                <button class="btn btn-primary btn-sm btn-block" @click="add()">Add</button>
             </div>
         </form>
     </div>
@@ -24,7 +27,10 @@
             return {
                 note: '',
                 category: null,
-                categories: []
+                categories: [],
+                error: {
+                    note: ''
+                },
             }
         },
         methods: {
@@ -44,6 +50,23 @@
             },
             validated() {
                 return this.note !== '' && this.category !== null
+            },
+            add() {
+                axios
+                    .post('/notes/store', {
+                        note: this.note
+                    })
+                    .then(response => {
+                        this.reset();
+
+                        if (response.data.error) {
+                            for (let property in response.data.error) {
+                                if (response.data.error[property][0]) {
+                                    this.error[property] = response.data.error[property][0];
+                                }
+                            }
+                        }
+                    })
             }
         },
         mounted() {

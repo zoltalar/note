@@ -13,3 +13,4 @@
 
 Route::get('/', 'AppController@index');
 Route::get('/categories/ajax', 'CategoriesController@ajax');
+Route::post('/notes/store', 'NotesController@store');

@@ -33052,6 +33052,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'add-note',
@@ -33059,7 +33062,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             note: '',
             category: null,
-            categories: []
+            categories: [],
+            error: {
+                note: ''
+            }
         };
     },
 
@@ -33080,6 +33086,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         validated: function validated() {
             return this.note !== '' && this.category !== null;
+        },
+        add: function add() {
+            var _this2 = this;
+
+            axios.post('/notes/store', {
+                note: this.note
+            }).then(function (response) {
+                _this2.reset();
+
+                if (response.data.error) {
+                    for (var property in response.data.error) {
+                        if (response.data.error[property][0]) {
+                            _this2.error[property] = response.data.error[property][0];
+                        }
+                    }
+                }
+            });
         }
     },
     mounted: function mounted() {
@@ -33118,7 +33141,28 @@ var render = function() {
               _vm.note = $event.target.value
             }
           }
-        })
+        }),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.error.note !== "",
+                expression: "error.note !== ''"
+              }
+            ],
+            staticClass: "invalid-feedback",
+            class: { "d-block": _vm.error.note !== "" }
+          },
+          [
+            _vm._v(
+              "\n                " + _vm._s(_vm.error.note) + "\n            "
+            )
+          ]
+        )
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "form-group" }, [
@@ -33160,7 +33204,11 @@ var render = function() {
           "button",
           {
             staticClass: "btn btn-primary btn-sm btn-block",
-            attrs: { disabled: !_vm.validated() }
+            on: {
+              click: function($event) {
+                _vm.add()
+              }
+            }
           },
           [_vm._v("Add")]
         )
