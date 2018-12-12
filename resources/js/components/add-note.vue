@@ -1,5 +1,5 @@
 <template>
-    <div class="pl-lg-4">
+    <div class="pl-md-4">
         <form>
             <h5 class="mb-3">Add Note</h5>
             <div class="form-group">
