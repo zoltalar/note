@@ -22,4 +22,9 @@ class NotesController extends Controller
             return new NoteResource($note);
         }
     }
+    
+    public function destroy($id)
+    {
+        return response()->json();
+    }
 }

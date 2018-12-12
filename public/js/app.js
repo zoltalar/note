@@ -33056,6 +33056,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'note-list',
@@ -33071,6 +33076,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             axios.get('/notes/index').then(function (response) {
                 _this.notes = response.data.data;
+            });
+        },
+        destroy: function destroy(note) {
+            this.notes = this.notes.filter(function (item) {
+                return item.id != note.id;
             });
         }
     },
@@ -33095,13 +33105,13 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "note-list" }, [
     _c("h5", { staticClass: "mb-3" }, [_vm._v("Notes")]),
     _vm._v(" "),
     _c(
       "div",
       { staticClass: "row" },
-      _vm._l(_vm.notes, function(note) {
+      _vm._l(_vm.notes, function(note, i) {
         return _c("div", { staticClass: "col-sm-6 col-lg-4" }, [
           _c(
             "div",
@@ -33111,7 +33121,28 @@ var render = function() {
             },
             [
               _c("div", { staticClass: "card-header" }, [
-                _vm._v(_vm._s(note.category.name))
+                _vm._v(
+                  "\n                    " +
+                    _vm._s(note.category.name) +
+                    "\n                    "
+                ),
+                _c(
+                  "button",
+                  {
+                    staticClass: "close text-white",
+                    attrs: { type: "button" },
+                    on: {
+                      click: function($event) {
+                        _vm.destroy(note)
+                      }
+                    }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×")
+                    ])
+                  ]
+                )
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "card-body" }, [
