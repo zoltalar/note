@@ -20863,7 +20863,15 @@ module.exports = __webpack_require__(217);
 /***/ (function(module, exports, __webpack_require__) {
 
 window.Vue = __webpack_require__(36);
+
 window.axios = __webpack_require__(78);
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
+var token = document.head.querySelector('meta[name="csrf-token"]');
+
+if (token) {
+    window.axios.defaults.headers.common['X-CSRF-TOKEN'] = token.content;
+}
 
 Vue.component('app', __webpack_require__(97));
 Vue.component('add-note', __webpack_require__(214));
@@ -33055,6 +33063,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'add-note',
@@ -33064,7 +33075,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             category: null,
             categories: [],
             error: {
-                note: ''
+                note: '',
+                category_id: ''
             }
         };
     },
@@ -33077,12 +33089,40 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.categories = response.data;
             });
         },
+        categoryId: function categoryId() {
+            var id = null;
+
+            if (this.category !== null) {
+                id = this.category.id;
+            }
+
+            return id;
+        },
         setCategory: function setCategory(category) {
-            if (this.category !== null && this.category.id === category.id) {
+            if (this.categoryId() === category.id) {
                 this.category = null;
             } else {
                 this.category = category;
             }
+        },
+        clearErrors: function clearErrors() {
+            this.error = {
+                note: '',
+                category_id: ''
+            };
+        },
+        setErrors: function setErrors(response) {
+            if (response.data.errors) {
+                for (var property in response.data.errors) {
+                    if (response.data.errors[property][0]) {
+                        this.error[property] = response.data.errors[property][0];
+                    }
+                }
+            }
+        },
+        resetForm: function resetForm() {
+            this.note = '';
+            this.category = null;
         },
         validated: function validated() {
             return this.note !== '' && this.category !== null;
@@ -33091,17 +33131,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             var _this2 = this;
 
             axios.post('/notes/store', {
-                note: this.note
+                note: this.note,
+                category_id: this.categoryId()
             }).then(function (response) {
-                _this2.reset();
-
-                if (response.data.error) {
-                    for (var property in response.data.error) {
-                        if (response.data.error[property][0]) {
-                            _this2.error[property] = response.data.error[property][0];
-                        }
-                    }
-                }
+                _this2.clearErrors();
+                _this2.setErrors(response);
+                _this2.resetForm();
+            }).catch(function (error) {
+                _this2.clearErrors();
+                _this2.setErrors(error.response);
             });
         }
     },
@@ -33168,7 +33206,7 @@ var render = function() {
       _c("div", { staticClass: "form-group" }, [
         _c(
           "ul",
-          { staticClass: "list-inline" },
+          { staticClass: "list-inline mb-0" },
           _vm._l(_vm.categories, function(_category) {
             return _c("li", { staticClass: "list-inline-item" }, [
               _c("span", {
@@ -33196,6 +33234,29 @@ var render = function() {
               })
             ])
           })
+        ),
+        _vm._v(" "),
+        _c(
+          "div",
+          {
+            directives: [
+              {
+                name: "show",
+                rawName: "v-show",
+                value: _vm.error.category_id !== "",
+                expression: "error.category_id !== ''"
+              }
+            ],
+            staticClass: "invalid-feedback",
+            class: { "d-block": _vm.error.category_id !== "" }
+          },
+          [
+            _vm._v(
+              "\n                " +
+                _vm._s(_vm.error.category_id) +
+                "\n            "
+            )
+          ]
         )
       ]),
       _vm._v(" "),
@@ -33204,6 +33265,7 @@ var render = function() {
           "button",
           {
             staticClass: "btn btn-primary btn-sm btn-block",
+            attrs: { type: "button" },
             on: {
               click: function($event) {
                 _vm.add()

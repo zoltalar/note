@@ -8,14 +8,17 @@
                 </div>
             </div>
             <div class="form-group">
-                <ul class="list-inline">
+                <ul class="list-inline mb-0">
                     <li class="list-inline-item" v-for="_category of categories">
                         <span class="category" :class="[{ active: (category !== null && category.id === _category.id) }, _category.color]" @click="setCategory(_category)" v-b-tooltip.hover :title="_category.name"></span>
                     </li>
                 </ul>
+                <div class="invalid-feedback" v-show="error.category_id !== ''" :class="{ 'd-block': error.category_id !== '' }">
+                    {{ error.category_id }}
+                </div>
             </div>
             <div class="form-group">
-                <button class="btn btn-primary btn-sm btn-block" @click="add()">Add</button>
+                <button type="button" class="btn btn-primary btn-sm btn-block" @click="add()">Add</button>
             </div>
         </form>
     </div>
@@ -29,8 +32,9 @@
                 category: null,
                 categories: [],
                 error: {
-                    note: ''
-                },
+                    note: '',
+                    category_id: ''
+                }
             }
         },
         methods: {
@@ -41,12 +45,40 @@
                         this.categories = response.data
                     })
             },
+            categoryId() {
+                let id = null
+                
+                if (this.category !== null) {
+                    id = this.category.id
+                }
+                
+                return id
+            },
             setCategory(category) {
-                if (this.category !== null && this.category.id === category.id) {
+                if (this.categoryId() === category.id) {
                     this.category = null
                 } else {
                     this.category = category
                 }
+            },
+            clearErrors() {
+                this.error = {
+                    note: '',
+                    category_id: ''
+                }
+            },
+            setErrors(response) {
+                if (response.data.errors) {
+                    for (let property in response.data.errors) {
+                        if (response.data.errors[property][0]) {
+                            this.error[property] = response.data.errors[property][0]
+                        }
+                    }
+                }
+            },
+            resetForm() {
+                this.note = ''
+                this.category = null
             },
             validated() {
                 return this.note !== '' && this.category !== null
@@ -54,18 +86,17 @@
             add() {
                 axios
                     .post('/notes/store', {
-                        note: this.note
+                        note: this.note,
+                        category_id: this.categoryId()
                     })
                     .then(response => {
-                        this.reset();
-
-                        if (response.data.error) {
-                            for (let property in response.data.error) {
-                                if (response.data.error[property][0]) {
-                                    this.error[property] = response.data.error[property][0];
-                                }
-                            }
-                        }
+                        this.clearErrors()
+                        this.setErrors(response)
+                        this.resetForm()
+                    })
+                    .catch(error => {
+                        this.clearErrors()
+                        this.setErrors(error.response)
                     })
             }
         },

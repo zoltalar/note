@@ -10,12 +10,6 @@ class NotesController extends Controller
 {
     public function store(NoteRequest $request)
     {
-        $validator = $this->getValidator($request);
-            
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()]);
-        }
-
         $note = new Note();
         $note->fill($request->only($note->getFillable()));
         
