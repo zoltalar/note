@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="pl-lg-4">
         <form>
             <div class="form-group">
                 <textarea class="form-control" rows="3" placeholder="Add a note..." v-model="note"></textarea>
@@ -18,7 +18,7 @@
                 </div>
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-primary btn-sm btn-block" @click="add()">Add</button>
+                <button type="button" class="btn btn-primary btn-sm btn-block" @click="add()" :disabled="!validated()">Add</button>
             </div>
         </form>
     </div>
@@ -40,9 +40,9 @@
         methods: {
             loadCategories() {
                 axios
-                    .get('/categories/ajax')
+                    .get('/categories/index')
                     .then(response => {
-                        this.categories = response.data
+                        this.categories = response.data.data
                     })
             },
             categoryId() {

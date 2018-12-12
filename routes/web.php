@@ -12,7 +12,10 @@
 */
 
 Route::get('/', 'AppController@index');
-Route::get('categories/ajax', 'CategoriesController@ajax');
+
+Route::group(['prefix' => 'categories'], function() {
+    Route::get('index', 'CategoriesController@index');
+});
 
 Route::group(['prefix' => 'notes'], function() {
     Route::get('index', 'NotesController@index');

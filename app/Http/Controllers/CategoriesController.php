@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Http\Resources\Category as CategoryResource;
 
 class CategoriesController extends Controller
 {
-    public function ajax()
+    public function index()
     {
-        return response()->json(Category::all());
+        return CategoryResource::collection(Category::all());
     }
 }

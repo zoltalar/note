@@ -32962,9 +32962,9 @@ var render = function() {
     _vm._m(0),
     _vm._v(" "),
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-sm-9" }, [_c("note-list")], 1),
+      _c("div", { staticClass: "col-sm-12 col-md-8" }, [_c("note-list")], 1),
       _vm._v(" "),
-      _c("div", { staticClass: "col-sm-3" }, [_c("add-note")], 1)
+      _c("div", { staticClass: "col-sm-12 col-md-4" }, [_c("add-note")], 1)
     ])
   ])
 }
@@ -33088,10 +33088,13 @@ var render = function() {
     "div",
     { staticClass: "row" },
     _vm._l(_vm.notes, function(note) {
-      return _c("div", { staticClass: "col-sm-4" }, [
+      return _c("div", { staticClass: "col-sm-6 col-lg-4" }, [
         _c(
           "div",
-          { staticClass: "card text-white", class: note.category.color },
+          {
+            staticClass: "card text-white mb-3 mb-sm-4",
+            class: note.category.color
+          },
           [
             _c("div", { staticClass: "card-header" }, [
               _vm._v(_vm._s(note.category.name))
@@ -33219,8 +33222,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         loadCategories: function loadCategories() {
             var _this = this;
 
-            axios.get('/categories/ajax').then(function (response) {
-                _this.categories = response.data;
+            axios.get('/categories/index').then(function (response) {
+                _this.categories = response.data.data;
             });
         },
         categoryId: function categoryId() {
@@ -33290,7 +33293,7 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "pl-lg-4" }, [
     _c("form", [
       _c("div", { staticClass: "form-group" }, [
         _c("textarea", {
@@ -33399,7 +33402,7 @@ var render = function() {
           "button",
           {
             staticClass: "btn btn-primary btn-sm btn-block",
-            attrs: { type: "button" },
+            attrs: { type: "button", disabled: !_vm.validated() },
             on: {
               click: function($event) {
                 _vm.add()

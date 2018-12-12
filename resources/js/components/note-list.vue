@@ -1,7 +1,7 @@
 <template>
     <div class="row">
-        <div class="col-sm-4" v-for="note in notes">
-            <div class="card text-white" :class="note.category.color">
+        <div class="col-sm-6 col-lg-4" v-for="note in notes">
+            <div class="card text-white mb-3 mb-sm-4" :class="note.category.color">
                 <div class="card-header">{{ note.category.name }}</div>
                 <div class="card-body">{{ note.note }}</div>
                 <div class="card-footer">
