@@ -33073,6 +33073,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -33105,6 +33106,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     });
                 });
             }
+        },
+        saveOrder: function saveOrder() {
+            var order = [];
+
+            for (var i = 0; i < this.notes.length; i++) {
+                order.push(this.notes[i].id);
+            }
+
+            axios.get('/notes/order', { params: { order: order } }).then(function (response) {
+                // Do nothing
+            });
         }
     },
     mounted: function mounted() {
@@ -35118,8 +35130,28 @@ var render = function() {
       _c("h5", { staticClass: "mb-3" }, [_vm._v("Notes")]),
       _vm._v(" "),
       _c(
+        "p",
+        {
+          directives: [
+            {
+              name: "show",
+              rawName: "v-show",
+              value: _vm.notes.length == 0,
+              expression: "notes.length == 0"
+            }
+          ]
+        },
+        [_vm._v("No notes to display.")]
+      ),
+      _vm._v(" "),
+      _c(
         "draggable",
         {
+          on: {
+            update: function($event) {
+              _vm.saveOrder()
+            }
+          },
           model: {
             value: _vm.notes,
             callback: function($$v) {

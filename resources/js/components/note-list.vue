@@ -1,7 +1,8 @@
 <template>
     <div class="note-list">
         <h5 class="mb-3">Notes</h5>
-        <draggable v-model="notes">
+        <p v-show="notes.length == 0">No notes to display.</p>
+        <draggable v-model="notes" @update="saveOrder()">
             <div class="card text-white mb-3 mb-sm-4" :class="note.category.color" v-for="(note, i) in notes">
                 <div class="card-header">
                     {{ note.category.name }}
@@ -46,6 +47,19 @@
                             this.notes = this.notes.filter(item => item.id != note.id)
                         })
                 }
+            },
+            saveOrder() {
+                let order = []
+                
+                for (let i=0; i<this.notes.length; i++) {
+                    order.push(this.notes[i].id)
+                }
+                
+                axios
+                    .get('/notes/order', { params: { order } })
+                    .then(response => {
+                        // Do nothing
+                    })
             }
         },
         mounted() {

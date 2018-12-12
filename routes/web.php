@@ -21,4 +21,5 @@ Route::group(['prefix' => 'notes'], function() {
     Route::get('index', 'NotesController@index');
     Route::post('store', 'NotesController@store');
     Route::get('destroy/{id}', 'NotesController@destroy');
+    Route::get('order', 'NotesController@order');
 });

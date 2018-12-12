@@ -12,6 +12,7 @@ class CreateNotesTable extends Migration
             $table->increments('id');
             $table->string('note');
             $table->smallInteger('category_id')->unsigned()->nullable();
+            $table->smallInteger('order')->unsigned()->nullable();
             $table->timestamps();
             
             $table->foreign('category_id')
