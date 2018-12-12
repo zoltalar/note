@@ -33081,11 +33081,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         destroy: function destroy(note) {
             var _this2 = this;
 
-            axios.get('/notes/destroy/' + note.id).then(function (response) {
-                _this2.notes = _this2.notes.filter(function (item) {
-                    return item.id != note.id;
+            if (confirm('Are you sure?')) {
+                axios.get('/notes/destroy/' + note.id).then(function (response) {
+                    _this2.notes = _this2.notes.filter(function (item) {
+                        return item.id != note.id;
+                    });
                 });
-            });
+            }
         }
     },
     mounted: function mounted() {
