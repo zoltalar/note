@@ -36,7 +36,11 @@
                     })
             },
             destroy(note) {
-                this.notes = this.notes.filter(item => item.id != note.id)
+                axios
+                    .get('/notes/destroy/' + note.id)
+                    .then(response => {
+                        this.notes = this.notes.filter(item => item.id != note.id)
+                    })
             }
         },
         mounted() {

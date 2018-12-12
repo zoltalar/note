@@ -33079,19 +33079,23 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             });
         },
         destroy: function destroy(note) {
-            this.notes = this.notes.filter(function (item) {
-                return item.id != note.id;
+            var _this2 = this;
+
+            axios.get('/notes/destroy/' + note.id).then(function (response) {
+                _this2.notes = _this2.notes.filter(function (item) {
+                    return item.id != note.id;
+                });
             });
         }
     },
     mounted: function mounted() {
-        var _this2 = this;
+        var _this3 = this;
 
         this.load();
 
         this.$root.$on('add-note', function (response) {
             if (response.data) {
-                _this2.notes.push(response.data.data);
+                _this3.notes.push(response.data.data);
             }
         });
     }

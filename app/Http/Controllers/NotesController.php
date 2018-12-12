@@ -25,6 +25,6 @@ class NotesController extends Controller
     
     public function destroy($id)
     {
-        return response()->json();
+        return response()->json(['data' => Note::destroy($id)]);
     }
 }
