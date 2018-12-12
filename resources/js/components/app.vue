@@ -5,7 +5,7 @@
         </nav>
         <div class="row">
             <div class="col-sm-9">
-                1
+                <note-list></note-list>
             </div>
             <div class="col-sm-3">
                 <add-note></add-note>

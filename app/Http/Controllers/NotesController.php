@@ -8,6 +8,11 @@ use App\Note;
 
 class NotesController extends Controller
 {
+    public function index()
+    {
+        return NoteResource::collection(Note::paginate());
+    }
+    
     public function store(NoteRequest $request)
     {
         $note = new Note();
