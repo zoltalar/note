@@ -12,6 +12,7 @@ if (token) {
 Vue.component('app', require('./components/app'))
 Vue.component('note-list', require('./components/note-list'))
 Vue.component('add-note', require('./components/add-note'))
+Vue.component('note-filter', require('./components/note-filter'))
 
 const app = new Vue({
     el: '#root',

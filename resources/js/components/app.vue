@@ -8,6 +8,7 @@
                 <note-list></note-list>
             </div>
             <div class="col-sm-12 col-md-5 col-lg-4">
+                <note-filter></note-filter>
                 <add-note></add-note>
             </div>
         </div>
