@@ -1,8 +1,9 @@
 <template>
     <div class="pl-lg-4">
         <form>
+            <h5 class="mb-3">Add Note</h5>
             <div class="form-group">
-                <textarea class="form-control" rows="3" placeholder="Add a note..." v-model="note"></textarea>
+                <textarea class="form-control" rows="3" placeholder="Note..." v-model="note"></textarea>
                 <div class="invalid-feedback" v-show="error.note !== ''" :class="{ 'd-block': error.note !== '' }">
                     {{ error.note }}
                 </div>
@@ -93,6 +94,7 @@
                         this.clearErrors()
                         this.setErrors(response)
                         this.resetForm()
+                        this.$root.$emit('add-note', response)
                     })
                     .catch(error => {
                         this.clearErrors()

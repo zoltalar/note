@@ -33053,6 +33053,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'note-list',
@@ -33072,7 +33075,15 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     mounted: function mounted() {
+        var _this2 = this;
+
         this.load();
+
+        this.$root.$on('add-note', function (response) {
+            if (response.data) {
+                _this2.notes.push(response.data.data);
+            }
+        });
     }
 });
 
@@ -33084,36 +33095,40 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "div",
-    { staticClass: "row" },
-    _vm._l(_vm.notes, function(note) {
-      return _c("div", { staticClass: "col-sm-6 col-lg-4" }, [
-        _c(
-          "div",
-          {
-            staticClass: "card text-white mb-3 mb-sm-4",
-            class: note.category.color
-          },
-          [
-            _c("div", { staticClass: "card-header" }, [
-              _vm._v(_vm._s(note.category.name))
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-body" }, [
-              _vm._v(_vm._s(note.note))
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "card-footer" }, [
-              _c("span", { staticClass: "small" }, [
-                _vm._v(_vm._s(note.created_at))
+  return _c("div", [
+    _c("h5", { staticClass: "mb-3" }, [_vm._v("Notes")]),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "row" },
+      _vm._l(_vm.notes, function(note) {
+        return _c("div", { staticClass: "col-sm-6 col-lg-4" }, [
+          _c(
+            "div",
+            {
+              staticClass: "card text-white mb-3 mb-sm-4",
+              class: note.category.color
+            },
+            [
+              _c("div", { staticClass: "card-header" }, [
+                _vm._v(_vm._s(note.category.name))
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "card-body" }, [
+                _vm._v(_vm._s(note.note))
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "card-footer" }, [
+                _c("span", { staticClass: "small" }, [
+                  _vm._v(_vm._s(note.created_at))
+                ])
               ])
-            ])
-          ]
-        )
-      ])
-    })
-  )
+            ]
+          )
+        ])
+      })
+    )
+  ])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -33178,6 +33193,7 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
 //
 //
 //
@@ -33274,6 +33290,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this2.clearErrors();
                 _this2.setErrors(response);
                 _this2.resetForm();
+                _this2.$root.$emit('add-note', response);
             }).catch(function (error) {
                 _this2.clearErrors();
                 _this2.setErrors(error.response);
@@ -33295,6 +33312,8 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "pl-lg-4" }, [
     _c("form", [
+      _c("h5", { staticClass: "mb-3" }, [_vm._v("Add Note")]),
+      _vm._v(" "),
       _c("div", { staticClass: "form-group" }, [
         _c("textarea", {
           directives: [
@@ -33306,7 +33325,7 @@ var render = function() {
             }
           ],
           staticClass: "form-control",
-          attrs: { rows: "3", placeholder: "Add a note..." },
+          attrs: { rows: "3", placeholder: "Note..." },
           domProps: { value: _vm.note },
           on: {
             input: function($event) {
