@@ -25,6 +25,11 @@ textarea {
     &.active {
         border-color: black;
     }
+    
+    &.disabled {
+        cursor: not-allowed;
+        opacity: .25;
+    }
 }
 
 .note-list {

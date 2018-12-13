@@ -32,9 +32,11 @@
             }
         },
         methods: {
-            load() {
+            load(id = null) {
                 axios
-                    .get('/notes/index')
+                    .get('/notes/index', {
+                        params: { category: id }
+                    })
                     .then(response => {
                         this.notes = response.data.data
                     })
@@ -57,9 +59,7 @@
                 
                 axios
                     .get('/notes/order', { params: { order } })
-                    .then(response => {
-                        // Do nothing
-                    })
+                    .then(response => {})
             }
         },
         mounted() {
@@ -69,6 +69,10 @@
                 if (response.data) {
                     this.notes.push(response.data.data)
                 }
+            })
+            
+            this.$root.$on('category-filter', (id) => {
+                this.load(id)
             })
         }
     }

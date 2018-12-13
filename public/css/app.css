@@ -10795,6 +10795,11 @@ textarea {
   border-color: black;
 }
 
+.category.disabled {
+  cursor: not-allowed;
+  opacity: .25;
+}
+
 .note-list .close {
   font-size: 1.25rem;
 }

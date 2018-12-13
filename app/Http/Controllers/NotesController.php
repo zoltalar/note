@@ -10,7 +10,16 @@ class NotesController extends Controller
 {
     public function index()
     {
-        return NoteResource::collection(Note::orderBy('order')->paginate());
+        $id = request()->category;
+        
+        $notes = Note::query()
+            ->when($id, function($query) use($id) {
+                return $query->where('category_id', $id);
+            })
+            ->orderBy('order')
+            ->paginate();
+        
+        return NoteResource::collection($notes);
     }
     
     public function store(NoteRequest $request)

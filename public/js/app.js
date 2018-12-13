@@ -33094,7 +33094,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         load: function load() {
             var _this = this;
 
-            axios.get('/notes/index').then(function (response) {
+            var id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+
+            axios.get('/notes/index', {
+                params: { category: id }
+            }).then(function (response) {
                 _this.notes = response.data.data;
             });
         },
@@ -33116,9 +33120,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 order.push(this.notes[i].id);
             }
 
-            axios.get('/notes/order', { params: { order: order } }).then(function (response) {
-                // Do nothing
-            });
+            axios.get('/notes/order', { params: { order: order } }).then(function (response) {});
         }
     },
     mounted: function mounted() {
@@ -33130,6 +33132,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (response.data) {
                 _this3.notes.push(response.data.data);
             }
+        });
+
+        this.$root.$on('category-filter', function (id) {
+            _this3.load(id);
         });
     }
 });
@@ -35309,6 +35315,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             note: '',
             category: null,
             categories: [],
+            limitCategory: null,
             error: {
                 note: '',
                 category_id: ''
@@ -35324,6 +35331,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 _this.categories = response.data.data;
             });
         },
+        setCategoryLimit: function setCategoryLimit(id) {
+            this.limitCategory = id;
+        },
         categoryId: function categoryId() {
             var id = null;
 
@@ -35334,11 +35344,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             return id;
         },
         setCategory: function setCategory(category) {
-            if (this.categoryId() === category.id) {
-                this.category = null;
-            } else {
-                this.category = category;
+            if (!this.isLimitedCategory() || this.isLimitedCategory() && this.limitCategory === category.id) {
+                if (this.categoryId() === category.id) {
+                    this.category = null;
+                } else {
+                    this.category = category;
+                }
             }
+        },
+        isLimitedCategory: function isLimitedCategory() {
+            return this.limitCategory !== null && this.limitCategory !== '';
         },
         clearErrors: function clearErrors() {
             this.error = {
@@ -35380,7 +35395,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     mounted: function mounted() {
+        var _this3 = this;
+
         this.loadCategories();
+
+        this.$root.$on('category-filter', function (id) {
+            _this3.setCategoryLimit(id);
+            _this3.category = null;
+        });
     }
 });
 
@@ -35459,7 +35481,10 @@ var render = function() {
                 class: [
                   {
                     active:
-                      _vm.category !== null && _vm.category.id === _category.id
+                      _vm.category !== null && _vm.category.id === _category.id,
+                    disabled:
+                      _vm.isLimitedCategory() &&
+                      _vm.limitCategory !== _category.id
                   },
                   _category.color
                 ],
@@ -35597,7 +35622,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     name: 'note-filter',
     data: function data() {
         return {
-            filter: '',
+            id: '',
             categories: []
         };
     },
@@ -35609,6 +35634,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             axios.get('/categories/index').then(function (response) {
                 _this.categories = response.data.data;
             });
+        }
+    },
+    watch: {
+        id: function id(value) {
+            this.$root.$emit('category-filter', value);
         }
     },
     mounted: function mounted() {
@@ -35636,8 +35666,8 @@ var render = function() {
               {
                 name: "model",
                 rawName: "v-model",
-                value: _vm.filter,
-                expression: "filter"
+                value: _vm.id,
+                expression: "id"
               }
             ],
             staticClass: "form-control",
@@ -35651,7 +35681,7 @@ var render = function() {
                     var val = "_value" in o ? o._value : o.value
                     return val
                   })
-                _vm.filter = $event.target.multiple
+                _vm.id = $event.target.multiple
                   ? $$selectedVal
                   : $$selectedVal[0]
               }

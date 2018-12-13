@@ -11,7 +11,7 @@
             <div class="form-group">
                 <ul class="list-inline mb-0">
                     <li class="list-inline-item" v-for="_category of categories">
-                        <span class="category" :class="[{ active: (category !== null && category.id === _category.id) }, _category.color]" @click="setCategory(_category)" v-b-tooltip.hover :title="_category.name"></span>
+                        <span class="category" :class="[{ active: (category !== null && category.id === _category.id), disabled: ( isLimitedCategory() && limitCategory !== _category.id) }, _category.color]" @click="setCategory(_category)" v-b-tooltip.hover :title="_category.name"></span>
                     </li>
                 </ul>
                 <div class="invalid-feedback" v-show="error.category_id !== ''" :class="{ 'd-block': error.category_id !== '' }">
@@ -32,6 +32,7 @@
                 note: '',
                 category: null,
                 categories: [],
+                limitCategory: null,
                 error: {
                     note: '',
                     category_id: ''
@@ -46,6 +47,9 @@
                         this.categories = response.data.data
                     })
             },
+            setCategoryLimit(id) {
+                this.limitCategory = id
+            },
             categoryId() {
                 let id = null
                 
@@ -56,11 +60,16 @@
                 return id
             },
             setCategory(category) {
-                if (this.categoryId() === category.id) {
-                    this.category = null
-                } else {
-                    this.category = category
+                if ( ! this.isLimitedCategory() || (this.isLimitedCategory() && this.limitCategory === category.id)) {
+                    if (this.categoryId() === category.id) {
+                        this.category = null
+                    } else {
+                        this.category = category
+                    }
                 }
+            },
+            isLimitedCategory() {
+                return this.limitCategory !== null && this.limitCategory !== ''
             },
             clearErrors() {
                 this.error = {
@@ -104,6 +113,11 @@
         },
         mounted() {
             this.loadCategories()
+            
+            this.$root.$on('category-filter', (id) => {
+                this.setCategoryLimit(id)
+                this.category = null
+            })
         }
     }
 </script>

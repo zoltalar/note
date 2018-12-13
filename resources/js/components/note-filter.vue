@@ -3,7 +3,7 @@
         <form>
             <h5 class="mb-3">Filter Notes</h5>
             <div class="form-group">
-                <select class="form-control" v-model="filter">
+                <select class="form-control" v-model="id">
                     <option value="">All Categories</option>
                     <option v-for="category in categories" :value="category.id">{{ category.name }}</option>
                 </select>
@@ -16,7 +16,7 @@
         name: 'note-filter',
         data() {
             return {
-                filter: '',
+                id: '',
                 categories: []
             }
         },
@@ -28,6 +28,11 @@
                         this.categories = response.data.data
                     })
             },
+        },
+        watch: {
+            id: function(value) {
+                this.$root.$emit('category-filter', value)
+            }
         },
         mounted() {
             this.loadCategories()
